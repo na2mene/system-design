@@ -1,0 +1,36 @@
+@startuml some erd
+
+entity "End Users" as EU {
+  End users using the system.
+}
+
+entity "My Items" as MI {
+  **HOGE hoge Hoge. **
+  `id` int(11) NOT NULL AUTO_INCREMENT
+  --
+  `end_user_id` int(11) NOT NULL
+  `hoge_name` varchar(191) DEFAULT NULL
+  `fuga` tinyint(4) DEFAULT NULL
+  `hoge_hoge` date DEFAULT NULL
+  `has_foo` tinyint(1) DEFAULT NULL
+  `foo_bar_hoge` text DEFAULT NULL
+  `created_at` datetime NOT NULL
+  `updated_at` datetime NOT NULL
+  `deleted_at` datetime DEFAULT NULL
+}
+
+entity "My Item Details" as MID {
+  **FOO foo Foo BAR bar Bar。**
+  `id` int(11) NOT NULL AUTO_INCREMENT
+  --
+  `my_item_id` int(11) NOT NULL
+  `fuga` varchar(191) DEFAULT NULL
+  `created_at` datetime NOT NULL
+  `updated_at` datetime NOT NULL
+}
+
+EU||--o|MI
+MI||--o{MID
+
+
+@enduml
