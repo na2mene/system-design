@@ -8,7 +8,7 @@
 ' External Entity: `rectangle`
 ' Data Flow: `-->`, `->`
 '
-rectangle "データ収集" {
+rectangle "Data collection" {
   rectangle "Landing Page" as 0e.2
   rectangle "Web UI" as 0e.3
   rectangle "External API" as 0e.4
@@ -25,7 +25,7 @@ rectangle "データ収集" {
   0e.3-->0d.3
 }
 
-rectangle "データ閲覧" {
+rectangle "Data viewing" {
   database "formatted data" as 1d.1
 
   control "sort, filter, etc" as 1c.1
