@@ -1,0 +1,13 @@
+#!/bin/bash
+
+sudo docker rm -f swagger-ui
+
+cd `dirname $0`
+
+sudo docker run \
+  -dt \
+  --name swagger-ui \
+  -p 9999:8080 \
+  -v $PWD/apis.yaml:/usr/share/nginx/html/swagger.yml \
+  -e API_URL=swagger.yml \
+  swaggerapi/swagger-ui

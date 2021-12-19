@@ -1,0 +1,282 @@
+openapi: 3.0.3
+info:
+  version: 1.0.0
+  title: Some title
+  description: Some discription
+servers:
+  - url: https://local.example.com/api/v1
+    description: Development server
+  - url: https://staging.job-medley.jp/api/v1
+    description: Staging server
+paths:
+
+  ########################
+  # tags: some_tags
+  ########################
+
+  /some_endpoint:
+    get:
+      summary: some summary
+      operationId: indexSomeEndpoint
+      tags:
+        - some_tags
+      parameters:
+        - name: id
+          in: query
+          required: false
+          schema:
+            type: integer
+            example: 1
+        - name: name
+          in: query
+          required: false
+          schema:
+            type: string
+            example: 'someName'
+        - name: status
+          in: query
+          required: false
+          schema:
+            type: integer
+            example: 1
+        - name: some_id
+          in: query
+          required: false
+          schema:
+            type: integer
+            example: 3
+        - name: pagination[page]
+          in: query
+          required: true
+          schema:
+            type: integer
+            example: 1
+        - name: pagination[limit]
+          in: query
+          required: true
+          schema:
+            type: integer
+            example: 50
+      responses:
+        '200':
+          description: Expected response to a valid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SomeEndpointListResponseBody'
+    post:
+      summary: some summary
+      operationId: createSomeEndpoint
+      tags:
+        - some_tags
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateSomeEndpointRequestBody'
+      responses:
+        '200':
+          description: Expected response to a valid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateSomeEndpointResponseBody'
+        '400':
+          description: Expected response to a invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateSomeEndpointInvalidResponseBody'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerErrorResponseBody'
+
+components:
+  schemas:
+
+    ######################
+    # Template Definition
+    ######################
+
+    SomeModel:
+      required:
+        - id
+        - name
+        - some_model_array
+        - position
+        - created_at
+        - updated_at
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: 'some name'
+        some_model_array:
+          type: array
+          # [NOTE]: overwrite
+          # example:
+          # - id: 1
+          #   name: 'hoge name'
+          # - id: 2
+          #   appeal_title: 'fuga name'
+          items:
+            $ref: '#/components/schemas/Some_Model2'
+        position:
+          type: string
+          nullable: true
+          example: 'some post'
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+
+    Some_Model2:
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: 'some name'
+
+    ######################
+    # Request Definition
+    ######################
+
+    # Create some endpoint
+    CreateSomeEndpointRequestBody:
+      required:
+        - some_model
+      properties:
+        some_model:
+          type: object
+          properties:
+            id:
+              type: integer
+              nullable: true
+              example: ''
+            some_id:
+              type: integer
+              example: 3
+            some_name:
+              type: string
+              nullable: true
+              example: 'foo name'
+            position:
+              type: string
+              nullable: true
+              example: 'bar position'
+            created_at:
+              type: string
+              format: date-time
+              example: ''
+            updated_at:
+              type: string
+              format: date-time
+              example: ''
+            some_model_details:
+              type: array
+              example:
+                - id: ''
+                  time: '2000-01-01T17:00:00.000+09:00'
+                  title: 'some title'
+                  description: 'some description'
+                - id: ''
+                  time: '2000-01-01T21:00:00.000+09:00'
+                  title: 'some title2'
+                  description: 'some description2'
+                - id: ''
+                  time: '2000-01-01T22:00:00.000+09:00'
+                  title: 'some title3'
+                  description: 'some description3'
+              items:
+                properties:
+                  id:
+                    type: integer
+                    nullable: true
+                  time:
+                    type: string
+                  title:
+                    type: string
+                    minLength: 1
+                    maxLength: 20
+                  description:
+                    type: string
+                    minLength: 10
+                    maxLength: 300
+
+    ######################
+    # Response Definition
+    ######################
+
+    # Index some endpoint
+    SomeEndpointListResponseBody:
+      required:
+        - some_model
+        - total
+        - count
+        - limit
+        - page
+      properties:
+        some_model:
+          type: array
+          items:
+            $ref: '#/components/schemas/SomeModel'
+        total:
+          type: integer
+          example: 1
+        count:
+          type: integer
+          example: 1
+        limit:
+          type: integer
+          example: 50
+        page:
+          type: integer
+          example: 1
+
+    # [200] Create some endpoint
+    CreateSomeEndpointResponseBody:
+      required:
+        - id
+        - some_id
+        - position
+      properties:
+        id:
+          type: integer
+          example: 1
+        some_id:
+          type: integer
+          example: 3
+        position:
+          type: string
+          nullable: true
+          example: 'hoge position'
+
+    # [400] Create some endpoint
+    CreateSomeEndpointInvalidResponseBody:
+      required:
+        - message
+      properties:
+        message:
+          type: string
+          example: Please enter the time,Please enter a title
+
+    # [500] Internal server error
+    InternalServerErrorResponseBody:
+      required:
+        - result
+      properties:
+        result:
+          type: string
+          example: 'Mysql2::Error: Cannot delete or update a parent row...etc'

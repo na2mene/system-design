@@ -1,0 +1,12 @@
+{
+  "name": "system-design",
+  "version": "1.0.0",
+  "author": "na2mene",
+  "license": "MIT",
+  "scripts": {
+    "generate_domain": "redoc-cli bundle web-api-designs/domains/domain/apis.yaml -o web-api-designs/domains/domain/out/index.html"
+  },
+  "dependencies": {
+    "redoc-cli": "^0.13.2"
+  }
+}
