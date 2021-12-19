@@ -1,0 +1,41 @@
+@startuml some dfd
+
+' How to express the DFD symbols
+' https://www.lucidchart.com/blog/data-flow-diagram-tutorial#dfd-symbols
+'
+' Process: `control`
+' Data Store: `database`
+' External Entity: `rectangle`
+' Data Flow: `-->`, `->`
+'
+rectangle "データ収集" {
+  rectangle "Landing Page" as 0e.2
+  rectangle "Web UI" as 0e.3
+  rectangle "External API" as 0e.4
+
+  control "merge" as 0c.2
+
+  database "raw data from UI" as 0d.2
+  database "formatted data" as 0d.3
+
+  0e.2-->0d.2
+  0d.2-->0c.2
+  0e.4-->0c.2
+  0c.2-->0d.3
+  0e.3-->0d.3
+}
+
+rectangle "データ閲覧" {
+  database "formatted data" as 1d.1
+
+  control "sort, filter, etc" as 1c.1
+
+  rectangle "Dashboard" as 1e.1
+
+  1d.1-->1c.1
+  1c.1-->1e.1
+}
+
+0d.3.>1d.1
+
+@enduml
