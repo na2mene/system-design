@@ -1,0 +1,32 @@
+@startuml sequence diagram for hoge fuga
+database Hogestore
+
+== Synchronous ==
+
+Browser -> WebAPI: POST /some_endpoints
+WebAPI -> Hogestore: Store the event
+Hogestore --> WebAPI: Respond as Succeeded
+WebAPI --> Browser: Respond as Succeeded
+
+== Asynchronous ==
+group Publisher
+  Hogestore ->> Publisher: Call the background function
+  Publisher -> PubSub: Publish the event
+  PubSub --> Publisher: Respond as Succeeded
+end
+
+group Subscribers
+  group Norify to Slack
+    PubSub ->> Subscriber2: Subscribe the event
+    Subscriber2 -> Slack: Post the message
+    Slack --> Subscriber2: Respond as Succeeded
+  end
+
+  group Store hoge data to Database
+    PubSub ->> Subscriber3: Subscribe the event
+    Subscriber3 -> Hogestore: Store data into hoge collection
+    Hogestore --> Subscriber3: Respond as Succeeded
+  end
+end
+
+@enduml
